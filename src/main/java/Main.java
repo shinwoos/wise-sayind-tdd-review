@@ -31,8 +31,5 @@ public class Main {
         String val2 = sc.nextLine();
         System.out.println(val2);
 
-        //test bot 만들기
-        TestApp app = new TestApp();
-        app.run();
     }
 }
