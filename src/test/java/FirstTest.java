@@ -26,13 +26,15 @@ public class FirstTest {
     @Test
     void t3(){
         //테스트 봇 선입력
-        Scanner sc = new Scanner("종료\n");
+//        Scanner sc = new Scanner("종료\n");
+//
+//        ByteArrayOutputStream out = new ByteArrayOutputStream();
+//        System.setOut(new PrintStream(out));
+//
+//        TestApp app = new TestApp();
+//        app.run();
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(out));
-
-        TestApp app = new TestApp();
-        app.run();
+        String out = TestBot.run("종료");
 
         assertThat(out.toString()).contains("명언앱 종료");
     }
@@ -41,13 +43,7 @@ public class FirstTest {
     @DisplayName("== 명언 앱 == 출력")
     void t4(){
         //테스트 봇 선입력
-        Scanner sc = new Scanner("종료\n");
-
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(out));
-
-        TestApp app = new TestApp();
-        app.run();
+        String out = TestBot.run("종료");
 
         // 테스트 코드 작성이 어려움.
         // assertJ 를 사용법을 잘 모름.
