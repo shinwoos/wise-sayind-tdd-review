@@ -1,4 +1,4 @@
-package domain;
+package domain.wiseSaying;
 
 public class WiseSaying {
     private int id;
