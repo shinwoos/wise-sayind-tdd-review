@@ -49,8 +49,10 @@ public class FirstTest {
         TestApp app = new TestApp();
         app.run();
 
+        // 테스트 코드 작성이 어려움.
+        // assertJ 를 사용법을 잘 모름.
+
         assertThat(out.toString())
-                .contains("== 명언 앱 ==")
-                .contains("명언앱 종료");
+                .containsSubsequence("== 명언 앱 ==", "명언앱 종료");
     }
 }
