@@ -1,0 +1,12 @@
+package app.standard;
+
+public class Util {
+    int num = 10;
+
+    public static class File{
+        public static void test(){
+            System.out.println("파일 유틸 테스트");
+        }
+    }
+
+}
