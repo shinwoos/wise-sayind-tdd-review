@@ -1,3 +1,7 @@
+package app.standard;
+
+import app.TestApp;
+
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
