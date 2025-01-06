@@ -3,6 +3,7 @@ package domain.wiseSaying;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class WiseSayingRepository {
 
     private final List<WiseSaying> wiseSayingList;
@@ -22,5 +23,9 @@ public class WiseSayingRepository {
 
     public List<WiseSaying> findAll() {
         return wiseSayingList;
+    }
+
+    public boolean deleteById(int id) {
+        return wiseSayingList.removeIf(w -> w.getId() == id); // 삭제 성공: true, 실패: false
     }
 }
