@@ -21,10 +21,35 @@ public class FileTest {
     void t2(){
         String file = "test.txt";
 
-        Util.File.createFile(); // 파일 생성 ok
+        Util.File.createFile(file); // 파일 생성 ok
 
         assertThat(Files.exists(Paths.get(file)))
                 .isTrue();
-
     }
+
+    @Test
+    @DisplayName("파일 내용 읽어오기")
+    void t3(){
+
+        String testContent = "Hello, World!";
+
+        String file = "test.txt";
+        String content = Util.File.readAsString(file);
+
+        assertThat(content)
+                .isEqualTo(testContent);
+    }
+
+//    @Test
+//    @DisplayName("파일 내용 수정")
+//    void t3(){
+//        String file = "test.txt";
+//
+//        Util.File.write(file, "Hello, World!");
+//
+//        String content = Files.readString(Paths.get(file));
+//
+//        assertThat(Files.exists(Paths.get(file)))
+//                .isTrue();
+//    }
 }
