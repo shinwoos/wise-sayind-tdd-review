@@ -20,7 +20,7 @@ public class FileTest {
     @Test
     @DisplayName("파일 생성. 내용이 없는 빈 파일 생성")
     void t2(){
-        String file = "test.txt";
+        String file = "test/test.txt";
 
         Util.File.createFile(file); // 파일 생성 ok
 
@@ -32,9 +32,12 @@ public class FileTest {
     @DisplayName("파일 내용 읽어오기")
     void t3(){
 
+        // 파일을 Hello, World로 생성
+
+        String file = "test/test.txt";
         String testContent = "Hello, World!";
 
-        String file = "test.txt";
+        Util.File.write(file, testContent);
         String content = Util.File.readAsString(file);
 
         assertThat(content)
@@ -44,7 +47,7 @@ public class FileTest {
     @Test
     @DisplayName("파일 내용 수정")
     void t4(){
-        String file = "test2.txt";
+        String file = "test/test.txt";
         String writeContent = "modify content";
 
         Util.File.write(file, "modify content");
@@ -57,10 +60,9 @@ public class FileTest {
     @Test
     @DisplayName("파일 삭제")
     void t5(){
-        String file = "test3.txt";
+        String file = "test/test.txt";
 
         Util.File.createFile(file);
-
         assertThat(Files.exists(Paths.get(file)))
                 .isTrue();
 
@@ -69,6 +71,6 @@ public class FileTest {
 
         //존재 여부 확인
         assertThat(Files.exists(Paths.get(file)))
-                .isTrue();
+                .isFalse();
     }
 }
