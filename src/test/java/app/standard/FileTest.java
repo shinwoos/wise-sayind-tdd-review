@@ -40,16 +40,16 @@ public class FileTest {
                 .isEqualTo(testContent);
     }
 
-//    @Test
-//    @DisplayName("파일 내용 수정")
-//    void t3(){
-//        String file = "test.txt";
-//
-//        Util.File.write(file, "Hello, World!");
-//
-//        String content = Files.readString(Paths.get(file));
-//
-//        assertThat(Files.exists(Paths.get(file)))
-//                .isTrue();
-//    }
+    @Test
+    @DisplayName("파일 내용 수정")
+    void t4(){
+        String file = "test.txt";
+        String writeContent = "modify content";
+
+        Util.File.write(file, "modify content");
+        String readContent = Util.File.readAsString(file);
+
+        assertThat(readContent)
+                .isEqualTo(writeContent);
+    }
 }

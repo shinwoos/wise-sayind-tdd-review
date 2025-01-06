@@ -26,7 +26,19 @@ public class Util {
         }
 
         public static String readAsString(String file) {
-            return null;
+
+            Path filePath = Paths.get(file);
+
+            try {
+                return Files.readString(filePath);
+            } catch (IOException e) {
+                System.out.println("파일 읽기 실패");
+                e.printStackTrace();
+            }
+            return "";
+        }
+
+        public static void write(String file, String modifyContent) {
         }
     }
 
