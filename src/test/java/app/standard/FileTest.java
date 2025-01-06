@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -43,7 +44,7 @@ public class FileTest {
     @Test
     @DisplayName("파일 내용 수정")
     void t4(){
-        String file = "test.txt";
+        String file = "test2.txt";
         String writeContent = "modify content";
 
         Util.File.write(file, "modify content");
@@ -51,5 +52,23 @@ public class FileTest {
 
         assertThat(readContent)
                 .isEqualTo(writeContent);
+    }
+
+    @Test
+    @DisplayName("파일 삭제")
+    void t5(){
+        String file = "test3.txt";
+
+        Util.File.createFile(file);
+
+        assertThat(Files.exists(Paths.get(file)))
+                .isTrue();
+
+        // test3.txt 파일삭제
+        Util.File.delete(file);
+
+        //존재 여부 확인
+        assertThat(Files.exists(Paths.get(file)))
+                .isTrue();
     }
 }

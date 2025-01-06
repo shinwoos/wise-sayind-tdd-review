@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 public class Util {
     int num = 10;
@@ -38,7 +39,19 @@ public class Util {
             return "";
         }
 
-        public static void write(String file, String modifyContent) {
+        public static void write(String file, String content) {
+
+            Path filePath = Paths.get(file);
+
+            try {
+                Files.writeString(filePath, content, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+            } catch (IOException e) {
+                System.out.println("파일 쓰기 실패");
+                e.printStackTrace();
+            }
+        }
+
+        public static void delete(String file) {
         }
     }
 
