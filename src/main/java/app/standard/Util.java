@@ -1,10 +1,13 @@
 package app.standard;
 
+import app.domain.wiseSaying.WiseSaying;
+
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -37,9 +40,9 @@ public class Util {
 
             Path filePath = Paths.get(file);
 
-            if(filePath.getParent() != null){
+            if (filePath.getParent() != null) {
                 createDir(filePath.getParent().toString());
-            };
+            }
 
             try {
                 Files.writeString(filePath, content, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
@@ -49,17 +52,19 @@ public class Util {
             }
         }
 
-        public static void delete(String file) {
+        public static boolean delete(String file) {
 
             Path filePath = Paths.get(file);
 
-            if(!Files.exists(filePath)) return;
+            if (!Files.exists(filePath)) return false;
 
             try {
                 Files.delete(filePath);
+                return true;
             } catch (IOException e) {
                 System.out.println("파일 삭제 실패");
                 e.printStackTrace();
+                return false;
             }
         }
 
@@ -73,9 +78,10 @@ public class Util {
         }
 
         public static void deleteForce(String path) {
+
             Path folderPath = Paths.get(path);
 
-            if(!Files.exists(folderPath)) return;
+            if (!Files.exists(folderPath)) return;
 
             try {
                 // 디렉토리 및 내용 삭제
@@ -101,7 +107,23 @@ public class Util {
             } catch (IOException e) {
                 System.err.println("폴더 삭제 중 오류 발생: " + e.getMessage());
             }
+        }
 
+        public static List<Path> getPaths(String dirPathStr) {
+
+            Path dirPath = Paths.get(dirPathStr);
+
+            try {
+                return Files.walk(dirPath)
+                        .filter(Files::isRegularFile)
+                        .toList();
+
+            } catch (Exception e) {
+                System.out.println("파일 목록 가져오기 실패");
+                e.printStackTrace();
+            }
+
+            return List.of();
         }
     }
 
@@ -116,24 +138,27 @@ public class Util {
             String str = map.keySet().stream()
                     .map(k -> map.get(k) instanceof String
                             ? "    \"%s\" : \"%s\"".formatted(k, map.get(k))
-                            : "    \"%s\" : %s".formatted(k,map.get(k)))
-                    .collect(Collectors.joining(",\n"));
+                            : "    \"%s\" : %s".formatted(k, map.get(k))
+                    ).collect(Collectors.joining(",\n"));
 
             jsonBuilder.append(str);
             jsonBuilder.append("\n}");
 
             return jsonBuilder.toString();
-        };
+        }
 
         public static void writeAsMap(String filePath, Map<String, Object> wiseSayingMap) {
-
             String jsonStr = mapToJson(wiseSayingMap);
             File.write(filePath, jsonStr);
-
         }
 
         public static Map<String, Object> readAsMap(String filePath) {
             String jsonStr = File.readAsString(filePath);
+
+            if(jsonStr.isEmpty()) {
+                return new LinkedHashMap<>();
+            }
+
             return jsonToMap(jsonStr);
         }
 
@@ -152,13 +177,13 @@ public class Util {
                         String key = p[0].replaceAll("\"", "");
                         String value = p[1];
 
-                        if(value.startsWith("\"")){
+                        if(value.startsWith("\"")) {
                             resultMap.put(key, value.replaceAll("\"", ""));
-                        }else if(value.contains(".")){
+                        } else if(value.contains(".")) {
                             resultMap.put(key, Double.parseDouble(value));
-                        }else if(value.equals("true") || value.equals("false")){
+                        } else if(value.equals("true") || value.equals("false")) {
                             resultMap.put(key, Boolean.parseBoolean(value));
-                        }else{
+                        } else {
                             resultMap.put(key, Integer.parseInt(value));
                         }
                     });
