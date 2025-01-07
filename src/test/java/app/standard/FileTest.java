@@ -24,7 +24,7 @@ public class FileTest {
     @AfterAll
     static void afterAll() {
         System.out.println("테스트 실행 후에 한번 실행");
-        Util.File.delete("test");
+        Util.File.deleteForce("test");
     }
 
     // 4. 테스트 종료 후에 test 폴더 삭제
@@ -132,8 +132,20 @@ public class FileTest {
 
         Util.File.createFile(path);
 
-        boolean lst = Files.exists(Paths.get(path));
-        assertThat(lst).isTrue();
+        boolean rst = Files.exists(Paths.get(path));
+        assertThat(rst)
+                .isTrue();
     }
 
+    @Test
+    @DisplayName("파일 삭제 -> 폴더가 비어있지 않을 때 안의 내용까지 같이 삭제")
+    void t9() {
+        String path = "test/test2/test.txt";
+
+        Util.File.deleteForce(path); // 강제 삭제
+
+        boolean rst = Files.exists(Paths.get(path));
+        assertThat(rst)
+                .isFalse();
+    }
 }
