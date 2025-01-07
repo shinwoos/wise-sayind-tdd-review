@@ -7,24 +7,14 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 public class Util {
-    int num = 10;
+    public static class File {
 
-    public static class File{
-        public static void test(){
+        public static void test() {
             System.out.println("파일 유틸 테스트");
         }
 
-
         public static void createFile(String pathValue) {
-
-            Path filePath = Paths.get(pathValue);
-
-            try {
-                Files.createFile(filePath);
-            } catch (IOException e) {
-                System.out.println("파일 생성 중 실패");
-                e.printStackTrace();
-            }
+            write(pathValue, "");
         }
 
         public static String readAsString(String file) {
@@ -37,12 +27,17 @@ public class Util {
                 System.out.println("파일 읽기 실패");
                 e.printStackTrace();
             }
+
             return "";
         }
 
         public static void write(String file, String content) {
 
             Path filePath = Paths.get(file);
+
+            if(filePath.getParent() != null){
+                createDir(filePath.getParent().toString());
+            };
 
             try {
                 Files.writeString(filePath, content, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
@@ -56,6 +51,8 @@ public class Util {
 
             Path filePath = Paths.get(file);
 
+            if(!Files.exists(filePath)) return;
+
             try {
                 Files.delete(filePath);
             } catch (IOException e) {
@@ -63,6 +60,14 @@ public class Util {
                 e.printStackTrace();
             }
         }
-    }
 
+        public static void createDir(String dirPath) {
+            try {
+                Files.createDirectories(Paths.get(dirPath));
+            } catch (IOException e) {
+                System.out.println("디렉토리 생성 실패");
+                e.printStackTrace();
+            }
+        }
+    }
 }
