@@ -25,7 +25,8 @@ public class WiseSayingFileRepository implements WiseSayingRepository{
 
         int id = ++lastId;
         wiseSaying.setId(id);
-        wiseSayingList.add(wiseSaying);
+
+
 
         return wiseSaying;
     }
