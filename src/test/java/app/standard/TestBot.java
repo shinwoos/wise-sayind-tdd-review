@@ -1,6 +1,6 @@
 package app.standard;
 
-import app.TestApp;
+import app.App;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -8,16 +8,21 @@ import java.util.Scanner;
 
 public class TestBot {
 
-    public static String run(String input){
+    public static String run(String input) {
         Scanner sc = new Scanner(input + "종료\n");
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        System.setOut((new PrintStream(out)));
+        System.setOut(new PrintStream(out));
 
-        TestApp app = new TestApp(sc);
+        App app = new App(sc);
         app.run();
-
 
         return out.toString();
     }
+
+    public static void makeSample(int cnt) {
+        App app = new App(null);
+        app.makeSampleData(cnt); // file 저장
+    }
+
 }

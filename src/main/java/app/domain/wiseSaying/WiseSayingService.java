@@ -6,9 +6,6 @@ import app.domain.wiseSaying.repository.WiseSayingRepository;
 import java.util.List;
 import java.util.Optional;
 
-// 무기 - 활
-// 무기 - 칼
-
 public class WiseSayingService {
 
     private final WiseSayingRepository wiseSayingRepository;
@@ -23,7 +20,7 @@ public class WiseSayingService {
         return wiseSayingRepository.save(wiseSaying);
     }
 
-    public List<WiseSaying> getAllItems() {
+    public Page getAllItems() {
         return wiseSayingRepository.findAll();
     }
 
@@ -40,5 +37,31 @@ public class WiseSayingService {
         wiseSaying.setAuthor(newAuthor);
 
         wiseSayingRepository.save(wiseSaying);
+    }
+
+    public void build() {
+        wiseSayingRepository.build();
+    }
+
+    public List<WiseSaying> search(String ktype, String kw) {
+
+        return wiseSayingRepository.findAll().getWiseSayings().stream()
+                .filter(w -> {
+                    if (ktype.equals("content")) {
+                        return w.getContent().contains(kw);
+                    } else {
+                        return w.getAuthor().contains(kw);
+                    }
+                })
+                .toList();
+
+    }
+
+    public void makeSampleData(int cnt) {
+        wiseSayingRepository.makeSampleData(cnt);
+    }
+
+    public int count() {
+        return wiseSayingRepository.count();
     }
 }

@@ -1,5 +1,6 @@
 package app.domain.wiseSaying;
 
+import app.domain.wiseSaying.repository.WiseSayingFileRepository;
 import app.global.AppConfig;
 import app.standard.TestBot;
 import app.standard.Util;
@@ -216,4 +217,85 @@ public class WiseSayingControllerTest {
                 .contains("등록된 명언이 없습니다.");
     }
 
+    @Test
+    @DisplayName("빌드")
+    void t14() {
+        String out = TestBot.run("""
+                등록
+                현재를 사랑하라.
+                작자미상
+                등록
+                과거에 집착하지 마라.
+                작자미상
+                빌드
+                """);
+
+
+        boolean rst = Util.File.exists(WiseSayingFileRepository.getBuildPath());
+        assertThat(rst).isTrue();
+
+    }
+
+    @Test
+    @DisplayName("검색 - 검색 타입과 키워드를 입력받아 키워드를 포함하는 명언을 출력한다.")
+    void t15() {
+        String out = TestBot.run("""
+                등록
+                현재를 사랑하라.
+                작자미상
+                등록
+                과거에 집착하지 마라.
+                작자미상
+                목록?keywordType=content&keyword=과거
+                """);
+
+        assertThat(out)
+                .contains("2 / 작자미상 / 과거에 집착하지 마라.")
+                .doesNotContain("1 / 작자미상 / 현재를 사랑하라.");
+    }
+
+    @Test
+    @DisplayName("페이징 - 샘플데이터 생성")
+    void t16() {
+
+        TestBot.makeSample(10);
+
+        String out = TestBot.run("""
+                목록
+                """);
+
+        assertThat(out)
+                .contains("1 / 작가1 / 명언1")
+                .contains("10 / 작가10 / 명언10");
+    }
+
+    @Test
+    @DisplayName("페이징 - 페이징 UI 출력")
+    void t17() {
+
+        TestBot.makeSample(10);
+
+        String out = TestBot.run("""
+                목록?page=2
+                """);
+
+        assertThat(out)
+                .contains("1 / [2]");
+
+    }
+
+    @Test
+    @DisplayName("페이징 - 페이징 UI 출력, 샘플 개수에 맞는 페이지 출력")
+    void t18() {
+
+        TestBot.makeSample(30);
+
+        String out = TestBot.run("""
+                목록?page=4
+                """);
+
+        assertThat(out)
+                .contains("1 / 2 / 3 / [4] / 5 / 6");
+
+    }
 }

@@ -51,7 +51,7 @@ public class CommandTest {
     void t5() {
 
         Command cmd = new Command("삭제?id=2");
-        int id = cmd.getParamAsInt("id");
+        int id = cmd.getParamAsInt("id", -1);
 
         assertThat(id).isEqualTo(2);
     }
@@ -74,14 +74,17 @@ public class CommandTest {
         assertThat(param3).isEqualTo("aa");
     }
 
+    // keywordType=content&keyword=과거&page=2
     @Test
-    @DisplayName("파라미터가 여러개 있을때, 파라미터 가져오기, 입력값 - 목록?key1=val1&key2=val2")
-    void t7(){
+    @DisplayName("파라미터가 여러개 있을 때, 파라미터 가져오기, 입력값 - 목록?key1=val1&key2=val2")
+    void t7() {
+
         Command cmd = new Command("목록?key1=val1&key2=val2");
         String param1 = cmd.getParam("key1");
         String param2 = cmd.getParam("key2");
 
         assertThat(param1).isEqualTo("val1");
         assertThat(param2).isEqualTo("val2");
+
     }
 }

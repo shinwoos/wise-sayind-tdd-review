@@ -8,9 +8,6 @@ public class Command {
     String actionName;
     Map<String, String> paramMap;
 
-    public Command(){
-
-    };
 
     public Command(String cmd) {
 
@@ -24,16 +21,16 @@ public class Command {
         }
 
         String queryString = cmdBits[1];
-        String[] params = queryString.split("&");
-        for(String param : params){
+        String[] params = queryString.split("&"); // ["key1=val1", "key2=val2"]
 
-        String[] paramBits = param.split("=", 2);
+        for(String param : params) {
+            String[] paramBits = param.split("=", 2);
 
-        // 목록?expr=1=1
-        if(paramBits.length < 2) {
-            continue;
-        }
-            paramMap.put(paramBits[0],paramBits[1]);
+            if(paramBits.length < 2) {
+                continue;
+            }
+
+            paramMap.put(paramBits[0], paramBits[1]);
         }
     }
 
@@ -45,13 +42,17 @@ public class Command {
         return paramMap.get(key);
     }
 
-    public int getParamAsInt(String key) {
+    public int getParamAsInt(String key, int defaultValue) {
 
-        try{
+        try {
             String param = paramMap.get(key);
             return Integer.parseInt(param);
-        }catch (NumberFormatException e){
-            return 0;
+        } catch (NumberFormatException e) {
+            return defaultValue;
         }
+    }
+
+    public boolean isSearchCommand() {
+        return (getParam("keywordType") != null || getParam("keyword") != null);
     }
 }
