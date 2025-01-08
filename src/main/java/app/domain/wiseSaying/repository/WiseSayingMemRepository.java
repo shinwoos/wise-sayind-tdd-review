@@ -12,6 +12,7 @@ public class WiseSayingMemRepository implements WiseSayingRepository{
     private int lastId;
 
     public WiseSayingMemRepository() {
+        System.out.println("메모리 DB 사용");
         wiseSayingList = new ArrayList<>();
     }
 

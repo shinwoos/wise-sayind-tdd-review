@@ -13,11 +13,10 @@ public class FileTest {
 
     // 3. 테스트 시작 전에 test 폴더 생성
     // 테스트 전처리
-
     @BeforeEach
     void beforeEach() {
         System.out.println("각 테스트 실행 전에 한번 실행");
-        Util.File.deleteForce("test");
+        Util.File.createDir("test");
     }
 
     @AfterEach
