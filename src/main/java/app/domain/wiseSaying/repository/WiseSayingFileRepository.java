@@ -12,6 +12,7 @@ import java.util.Optional;
 public class WiseSayingFileRepository implements WiseSayingRepository {
 
     private static final String DB_PATH = "db/test/wiseSaying/";
+    private int lastId;
 
     public WiseSayingFileRepository() {
         System.out.println("파일 DB 사용");
@@ -19,6 +20,7 @@ public class WiseSayingFileRepository implements WiseSayingRepository {
 
     public WiseSaying save(WiseSaying wiseSaying) {
 
+        wiseSaying.setId(++lastId);
         Util.Json.writeAsMap(getFilePath(wiseSaying.getId()), wiseSaying.toMap());
         return wiseSaying;
     }
