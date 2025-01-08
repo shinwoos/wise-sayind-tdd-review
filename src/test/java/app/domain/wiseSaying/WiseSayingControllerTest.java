@@ -1,24 +1,27 @@
 package app.domain.wiseSaying;
 
+import app.global.AppConfig;
 import app.standard.TestBot;
 import app.standard.Util;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class WiseSayingControllerTest {
 
+    @BeforeAll
+    static void beforeAll() {
+        AppConfig.setTestMode();
+    }
+
     @BeforeEach
-    void beforeEach(){
-        Util.File.deleteForce("db/test");
+    void before() {
+        Util.File.deleteForce(AppConfig.getDbPath());
     }
 
     @AfterEach
-    void afterEach(){
-        Util.File.deleteForce("db/test");
+    void after() {
+        Util.File.deleteForce(AppConfig.getDbPath());
     }
 
     @Test
@@ -201,4 +204,7 @@ public class WiseSayingControllerTest {
                 .doesNotContain("1 / 작자미상 / 현재를 사랑하라.")
                 .contains("1 / 새 작가 / 새 명언 내용");
     }
+
+
+
 }
