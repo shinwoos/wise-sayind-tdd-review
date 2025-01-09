@@ -9,10 +9,7 @@ import app.standard.Util;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class WiseSayingFileRepository implements WiseSayingRepository {
 
@@ -52,21 +49,49 @@ public class WiseSayingFileRepository implements WiseSayingRepository {
         return wiseSaying;
     }
 
-    public Page findAll() {
+    public Page<WiseSaying> findByKeyword(String ktype, String kw, int itemsPerPage, int page) {
 
-        int itemsPerPage = 5;
+        List<WiseSaying> searchedWiseSayings = findAll().stream()
+                .filter(w -> {
+                    if (ktype.equals("content")) {
+                        return w.getContent().contains(kw);
+                    } else {
+                        return w.getAuthor().contains(kw);
+                    }
+                })
+                .sorted(Comparator.comparing(WiseSaying::getId).reversed()) // 기본은 오름차순. 내림차순
+                .toList();
 
-        // 선언형
-        List<WiseSaying> wiseSayings = Util.File.getPaths(DB_PATH).stream()
+        return pageOf(searchedWiseSayings, itemsPerPage, page);
+    }
+
+    public Page<WiseSaying> findAll(int itemsPerPage, int page) {
+        List<WiseSaying> sortedWiseSayings = findAll().stream()
+                .sorted(Comparator.comparing(WiseSaying::getId).reversed())
+                .toList();
+
+        return pageOf(sortedWiseSayings, itemsPerPage, page);
+    }
+
+    List<WiseSaying> findAll() {
+        return Util.File.getPaths(DB_PATH).stream()
                 .map(Path::toString)
                 .filter(path -> path.endsWith(".json"))
                 .map(Util.Json::readAsMap)
                 .map(WiseSaying::fromMap)
                 .toList();
 
-        int totalPages = (int) Math.ceil((double) wiseSayings.size() / itemsPerPage);
+    }
 
-        return new Page(wiseSayings, totalPages, wiseSayings.size());
+    private Page<WiseSaying> pageOf(List<WiseSaying> wiseSayings, int itemsPerPage, int page) {
+        int totalItems = wiseSayings.size();
+
+        List<WiseSaying> pageContent = wiseSayings.stream()
+                .skip((long) (page - 1) * itemsPerPage)
+                .limit(itemsPerPage)
+                .toList();
+
+        return new Page<>(pageContent, totalItems, itemsPerPage, page);
     }
 
     public boolean deleteById(int id) {
@@ -109,7 +134,7 @@ public class WiseSayingFileRepository implements WiseSayingRepository {
 
     public void build() {
 
-        List<Map<String, Object>> mapList = findAll().getWiseSayings().stream()
+        List<Map<String, Object>> mapList = findAll().stream()
                 .map(WiseSaying::toMap)
                 .toList();
 
@@ -119,7 +144,7 @@ public class WiseSayingFileRepository implements WiseSayingRepository {
 
     @Override
     public void makeSampleData(int cnt) {
-        for(int i = 1; i <= cnt; i++) {
+        for (int i = 1; i <= cnt; i++) {
             WiseSaying wiseSaying = new WiseSaying("명언" + i, "작가" + i);
             save(wiseSaying);
         }
@@ -130,6 +155,6 @@ public class WiseSayingFileRepository implements WiseSayingRepository {
     }
 
     public int count() {
-        return findAll().getWiseSayings().size();
+        return findAll().size();
     }
 }
